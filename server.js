@@ -7,6 +7,7 @@ import userRoutes from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
 import wallRoutes from "./routes/wallRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import { limiter } from './controllers/wallsController.js';
 
 // connectDB();
 const port = 5000;
@@ -25,10 +26,11 @@ app.use(
 
 //cookie parse middleware
 app.use(cookieParser());
+app.use('/api', limiter);
+
 // routes
 app.use("/api/users", userRoutes);
 app.use("/api/wallhaven", wallRoutes);
-
 app.get("/", (req, res) => {
   res.send(`wallHaven-api ${new Date().getFullYear()} ${new Date().getDate()} - Server Running213123213`);
 });

@@ -1,3 +1,6 @@
+
+import NodeCache from 'node-cache';
+import rateLimit from 'express-rate-limit';
 import axios from "axios";
 const server = "https://wallhaven.cc/api/v1";
 
@@ -99,14 +102,38 @@ const fetchWall = async (req, res) => {
   }
 };
 
-const proxyImage = async (req, res) => {
+import NodeCache from 'node-cache';
+import rateLimit from 'express-rate-limit';
+
+// 创建缓存实例
+const imageCache = new NodeCache({ stdTTL: 3600 }); // 缓存1小时
+
+// 创建访问限制实例
+export const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 1000 
+});
+
+export const proxyImage = async (req, res) => {
   const imageUrl = req.query.url;
   
+  // 检查缓存
+  const cachedImage = imageCache.get(imageUrl);
+  if (cachedImage) {
+    res.setHeader('Content-Type', cachedImage.contentType);
+    res.setHeader('X-Cache', 'HIT');
+    return res.send(cachedImage.data);
+  }
+
   try {
-    const response = await axios.get(imageUrl, { responseType: "stream" });
-    response.headers["content-type"] &&
-      res.setHeader("content-type", response.headers["content-type"]);
-    response.data.pipe(res);
+    const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+    const contentType = response.headers['content-type'];
+    
+    imageCache.set(imageUrl, { data: response.data, contentType });
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('X-Cache', 'MISS');
+    res.send(response.data);
   } catch (error) {
     console.error("Error proxying image:", error);
     res.status(500).send("Error proxying image");
