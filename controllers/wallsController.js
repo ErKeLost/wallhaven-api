@@ -99,7 +99,23 @@ const fetchWall = async (req, res) => {
   }
 };
 
+const proxyImage = async (req, res) => {
+  const imageUrl = req.query.url;
+  console.log(imageUrl);
+  
+  try {
+    const response = await axios.get(imageUrl, { responseType: "stream" });
+    response.headers["content-type"] &&
+      res.setHeader("content-type", response.headers["content-type"]);
+    response.data.pipe(res);
+  } catch (error) {
+    console.error("Error proxying image:", error);
+    res.status(500).send("Error proxying image");
+  }
+};
+
 export {
+  proxyImage,
   fetchHome,
   fetchTop,
   fetchLatest,
