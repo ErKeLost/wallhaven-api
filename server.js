@@ -29,13 +29,10 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use("/api/wallhaven", wallRoutes);
 
-app.get("/123", (req, res) => {
+app.get("/", (req, res) => {
   res.send(`wallHaven-api ${new Date().getFullYear()} ${new Date().getDate()} - Server Running213123213`);
 });
 
-app.get("/base", (req, res) => {
-  res.send(`base route`);
-});
 
 //custom error middleware
 app.use(notFound);

@@ -101,7 +101,6 @@ const fetchWall = async (req, res) => {
 
 const proxyImage = async (req, res) => {
   const imageUrl = req.query.url;
-  console.log(imageUrl);
   
   try {
     const response = await axios.get(imageUrl, { responseType: "stream" });
