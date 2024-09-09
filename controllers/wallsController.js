@@ -106,7 +106,7 @@ import NodeCache from 'node-cache';
 import rateLimit from 'express-rate-limit';
 
 // 创建缓存实例
-const imageCache = new NodeCache({ stdTTL: 3600 }); // 缓存1小时
+const imageCache = new NodeCache({ stdTTL: 36000 }); // 缓存1小时
 
 // 创建访问限制实例
 export const limiter = rateLimit({
