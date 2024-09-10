@@ -111,7 +111,7 @@ export const limiter = rateLimit({
   max: 1000 
 });
 
-export const proxyImage = async (req, res) => {
+const proxyImage = async (req, res) => {
   const imageUrl = req.query.url;
   
   // 检查缓存
