@@ -14,6 +14,7 @@ const port = 5000;
 const app = express();
 
 // body parser middleware
+app.use('/api', limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -26,7 +27,6 @@ app.use(
 
 //cookie parse middleware
 app.use(cookieParser());
-app.use('/api', limiter);
 
 // routes
 app.use("/api/users", userRoutes);
