@@ -102,9 +102,6 @@ const fetchWall = async (req, res) => {
   }
 };
 
-import NodeCache from 'node-cache';
-import rateLimit from 'express-rate-limit';
-
 // 创建缓存实例
 const imageCache = new NodeCache({ stdTTL: 36000 }); // 缓存1小时
 
